@@ -2,6 +2,8 @@
 
 A GeoGuessr-inspired geography and climatology game that drops you into a mystery Google Street View location anywhere on Earth and challenges you to deduce its **Köppen climate classification**.
 
+🎮 **Play Online**: [https://vadim0x60.github.io/koppengame/](https://vadim0x60.github.io/koppengame/)
+
 ## ✨ Features
 
 - **Interactive 360° Street View**: Look around, pan, zoom, and inspect flora, soil, topography, sunlight angle, and architecture.
