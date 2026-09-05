@@ -31,8 +31,7 @@ const KOPPEN_CLASSES = [
   // Group A
   { code: 'Af', group: 'A', name: 'Tropical Rainforest', summary: 'Constant high temps, precipitation >60mm each month, multi-tiered evergreen canopy.' },
   { code: 'Am', group: 'A', name: 'Tropical Monsoon', summary: 'Intense rainy season with a short dry interval, high annual totals.' },
-  { code: 'Aw', group: 'A', name: 'Tropical Savanna (Wet/Dry)', summary: 'Pronounced wet summer and bone-dry winter, drought-adapted trees and grassland.' },
-  { code: 'As', group: 'A', name: 'Tropical Savanna (Dry Summer)', summary: 'Tropical climate with a dry season during high-sun summer months.' },
+  { code: 'Aw/As', group: 'A', name: 'Tropical Savanna (Wet/Dry)', summary: 'Tropical climate with a pronounced wet season and dry season, supporting drought-adapted trees and grassland.' },
 
   // Group B
   { code: 'BWh', group: 'B', name: 'Hot Desert', summary: 'Extremely arid, mean annual temp >= 18°C, sparse succulents/gravel plains.' },
@@ -112,6 +111,12 @@ async function init() {
   try {
     const res = await fetch('locations.json?t=' + Date.now());
     locations = await res.json();
+    locations.forEach(location => {
+      if (location.koppen_code === 'Aw' || location.koppen_code === 'As') {
+        location.koppen_code = 'Aw/As';
+        location.koppen_name = 'Tropical Savanna (Wet/Dry)';
+      }
+    });
     shuffleArray(locations);
     availableLocations = [...locations];
     renderReferenceGuide();
