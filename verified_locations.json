@@ -1,0 +1,512 @@
+[
+  {
+    "id": "borneo_semenggoh_rural",
+    "name": "Borneo Rainforest Reserve Road",
+    "country": "Malaysia (Sarawak)",
+    "lat": 1.404355743497238,
+    "lng": 110.3215053617324,
+    "koppen_code": "Af",
+    "koppen_group": "A",
+    "koppen_name": "Tropical Rainforest climate",
+    "hints": [
+      "Equatorial rainforest corridor with dense broadleaf canopy and epiphytes",
+      "Heavy red clay tropical soil",
+      "Consistent year-round warmth and precipitation with no dry month under 60mm"
+    ],
+    "explanation": "Af: Deep in Malaysian Borneo, rainfall exceeds 60mm every single month, sustaining lush multi-storied tropical rainforest.",
+    "pano_id": "mFoJ7KJv76ufX90TH3rJ5w"
+  },
+  {
+    "id": "costa_rica_sarapiqui",
+    "name": "Sarapiqu\u00ed Lowland Rainforest Corridor",
+    "country": "Costa Rica",
+    "lat": 10.45243918559885,
+    "lng": -84.01579635821369,
+    "koppen_code": "Af",
+    "koppen_group": "A",
+    "koppen_name": "Tropical Rainforest climate",
+    "hints": [
+      "Lowland Caribbean slope with dense evergreen jungle",
+      "Bromeliads, heliconias, and palms lining the road",
+      "High atmospheric humidity and over 4,000mm annual precipitation"
+    ],
+    "explanation": "Af: Costa Rica's Caribbean lowlands receive moisture-laden trade winds year-round without any true dry season.",
+    "pano_id": "VHzj4-9uZ4bLSv7kvlLffA"
+  },
+  {
+    "id": "daintree_cape_tribulation",
+    "name": "Cape Tribulation Rainforest Road",
+    "country": "Australia",
+    "lat": -16.08328969311723,
+    "lng": 145.4469420112807,
+    "koppen_code": "Af",
+    "koppen_group": "A",
+    "koppen_name": "Tropical Rainforest climate",
+    "hints": [
+      "Ancient tropical rainforest running directly down to the coast",
+      "Dense canopy of fan palms, cycads, and strangler figs",
+      "Tropical warmth with high monthly rain throughout the year"
+    ],
+    "explanation": "Af: The Daintree is Australia's oldest tropical rainforest, receiving massive orographic rainfall from Pacific trade winds.",
+    "pano_id": "CAoSFkNJSE0wb2dLRUlDQWdJRHV1cFcxS0E."
+  },
+  {
+    "id": "phuket_interior_hills",
+    "name": "Khao Phra Thaeo Foothills",
+    "country": "Thailand",
+    "lat": 8.027769385636121,
+    "lng": 98.36320680982568,
+    "koppen_code": "Am",
+    "koppen_group": "A",
+    "koppen_name": "Tropical Monsoon climate",
+    "hints": [
+      "Lush tropical rubber and bamboo thickets",
+      "Brief drier winter spell followed by relentless southwest monsoon deluges",
+      "Undulating coastal hills covered in dense green growth"
+    ],
+    "explanation": "Am: Tropical monsoon climate with intense seasonal deluge alternating with a short, distinct dry season.",
+    "pano_id": "CAoSF0NJSE0wb2dLRUlDQWdJRGMxY1ROdFFF"
+  },
+  {
+    "id": "western_ghats_munnar_rural",
+    "name": "Western Ghats Gap Road, Idukki",
+    "country": "India",
+    "lat": 10.01557136140988,
+    "lng": 77.06233258252374,
+    "koppen_code": "Am",
+    "koppen_group": "A",
+    "koppen_name": "Tropical Monsoon climate",
+    "hints": [
+      "Steep mist-shrouded mountain flanks with shola-grassland mosaic and tea hills",
+      "Deluging southwest monsoon rains from June to September",
+      "Deep green tropical mountain vegetation"
+    ],
+    "explanation": "Am: The Western Ghats capture moisture from the Arabian Sea, creating some of the world's most intense tropical monsoons.",
+    "pano_id": "WL8P4AO_tbl8yIVlnlC_Qw"
+  },
+  {
+    "id": "kakadu_jabiru_bush",
+    "name": "Arnhem Highway, Kakadu Savannah Basin",
+    "country": "Australia",
+    "lat": -12.67062038256714,
+    "lng": 132.8346490550524,
+    "koppen_code": "Aw",
+    "koppen_group": "A",
+    "koppen_name": "Tropical Savanna (Wet/Dry)",
+    "hints": [
+      "Open eucalyptus savanna woodland and tall dry spear grass",
+      "Flat tropical plain with magnetic termite mounds",
+      "Severe winter drought followed by monsoonal summer floods"
+    ],
+    "explanation": "Aw: Northern Australia's tropical savannas have an extreme wet/dry cycle: months of total drought followed by torrential monsoonal rains.",
+    "pano_id": "5OSg83X554rSkufc5TzKMg"
+  },
+  {
+    "id": "cerrado_chapada_dos_veadeiros",
+    "name": "GO-118 Highway, Chapada Plateau",
+    "country": "Brazil",
+    "lat": -14.13524419154521,
+    "lng": -47.51819628005256,
+    "koppen_code": "Aw",
+    "koppen_group": "A",
+    "koppen_name": "Tropical Savanna (Wet/Dry)",
+    "hints": [
+      "Twisted trees with thick, corky bark and tough sclerophyllous leaves",
+      "Expansive savanna grassland plateau under vast sky",
+      "Extreme parching during dry southern winter (June-August)"
+    ],
+    "explanation": "Aw: Brazil's Cerrado plateau experiences high tropical heat and a severe winter dry period followed by summer downpours.",
+    "pano_id": "CAoSF0NJSE0wb2dLRUlDQWdJRGswY2JnakFF"
+  },
+  {
+    "id": "kenya_rift_valley_rural",
+    "name": "Mai Mahiu Escarpment Route, Great Rift Valley",
+    "country": "Kenya",
+    "lat": -0.9863119031179555,
+    "lng": 36.58215717991111,
+    "koppen_code": "Aw",
+    "koppen_group": "A",
+    "koppen_name": "Tropical Savanna climate",
+    "hints": [
+      "Yellow-barked acacia trees (fever tree) and dry scrub grassland",
+      "Dramatic volcanic rift valley escarpment",
+      "Equatorial bimodal wet and dry seasons"
+    ],
+    "explanation": "Aw: Tropical savanna in the East African Rift with prolonged dry periods and open acacia-dotted grasslands.",
+    "pano_id": "NJ0dkj3-htDcFmFgF9zSvw"
+  },
+  {
+    "id": "death_valley_artist_drive",
+    "name": "Badwater Basin Flats, Death Valley",
+    "country": "United States",
+    "lat": 36.24538076237238,
+    "lng": -116.8279266063727,
+    "koppen_code": "BWh",
+    "koppen_group": "B",
+    "koppen_name": "Hot Desert climate",
+    "hints": [
+      "Bleached salt pan flats and hyper-arid alluvial gravel fans",
+      "Virtually zero vegetation save for isolated saltbush and creosote",
+      "Extreme summer temperatures frequently exceeding 45\u00b0C"
+    ],
+    "explanation": "BWh: Death Valley is a textbook hot desert where potential evaporation exceeds precipitation by more than thirtyfold.",
+    "pano_id": "CAoSF0NJSE0wb2dLRUlDQWdJREhwWkgwMndF"
+  },
+  {
+    "id": "stuart_hwy_central_aus",
+    "name": "Stuart Highway, Marla Plains",
+    "country": "Australia",
+    "lat": -27.30129912697682,
+    "lng": 133.6212944963294,
+    "koppen_code": "BWh",
+    "koppen_group": "B",
+    "koppen_name": "Hot Desert climate",
+    "hints": [
+      "Bright crimson-red sand and ironstone gibber desert",
+      "Sparse clumps of spinifex grass and mulga scrub",
+      "Subtropical high-pressure belt with searing summer heat"
+    ],
+    "explanation": "BWh: The Australian Red Centre is dominated by the subtropical ridge, producing hot, arid desert conditions.",
+    "pano_id": "KCaYSB1Qkh2j6fuJSD4P7A"
+  },
+  {
+    "id": "baja_desert_vizcaino",
+    "name": "Carretera Transpeninsular, Vizca\u00edno Biosphere",
+    "country": "Mexico",
+    "lat": 27.64665477340269,
+    "lng": -113.4439610556347,
+    "koppen_code": "BWh",
+    "koppen_group": "B",
+    "koppen_name": "Hot Desert climate",
+    "hints": [
+      "Spectacular endemic card\u00f3n cacti and yucca-like cirio trees",
+      "Rocky volcanic gravel under blinding desert sunshine",
+      "Extremely low annual precipitation (<100mm)"
+    ],
+    "explanation": "BWh: The Vizca\u00edno desert sits under persistent subtropical subsiding air, creating an arid, cactus-rich hot desert.",
+    "pano_id": "aLlKsybi0D3XosZqRVIS6A"
+  },
+  {
+    "id": "salardeatacama_chile",
+    "name": "Ruta 23, San Pedro Altiplano Border",
+    "country": "Chile",
+    "lat": -23.13995987054969,
+    "lng": -68.05827066349698,
+    "koppen_code": "BWk",
+    "koppen_group": "B",
+    "koppen_name": "Cold Desert climate",
+    "hints": [
+      "Hyper-arid volcanic plateau with white crusty borax/salt deposits",
+      "Bare reddish-brown volcanic cones under deep cobalt blue skies",
+      "Crisp thin air with freezing night temperatures even in summer"
+    ],
+    "explanation": "BWk: The high Atacama is a cold desert (mean temp <18\u00b0C), desiccated by the Humboldt Current and rain-shadowed by the Andes.",
+    "pano_id": "rmzKLTd-UhGl_jb6lVFgNQ"
+  },
+  {
+    "id": "mongolia_south_gobi_paved",
+    "name": "Mandalgovi-Dalandzadgad Highway, Gobi Steppe",
+    "country": "Mongolia",
+    "lat": 44.5050478817987,
+    "lng": 105.7682250322214,
+    "koppen_code": "BWk",
+    "koppen_group": "B",
+    "koppen_name": "Cold Desert climate",
+    "hints": [
+      "Flat gravel plain with dwarf saxaul and allium clumps",
+      "Vast empty horizons with distant flat-topped ridges",
+      "Severe sub-zero winter freeze (-25\u00b0C) and hot arid summers"
+    ],
+    "explanation": "BWk: The Gobi has a cold desert climate: extreme continentality far from oceans, severe winter freeze, and minimal precipitation.",
+    "pano_id": "mcbdIBOIb5t9ojkCUmSGBg"
+  },
+  {
+    "id": "ruta40_treslagos_patagonia",
+    "name": "Ruta 40, Santa Cruz Gravel Steppe",
+    "country": "Argentina",
+    "lat": -49.59955862737696,
+    "lng": -71.45115161212914,
+    "koppen_code": "BSk",
+    "koppen_group": "B",
+    "koppen_name": "Cold Semi-Arid (Steppe) climate",
+    "hints": [
+      "Endless windswept coir\u00f3n bunchgrass and thorny mata negra shrubs",
+      "Flat basalt plateaus under relentless dry westerly gales",
+      "Cold dry winters with Andean rain shadow blocking Pacific moisture"
+    ],
+    "explanation": "BSk: The Patagonian steppe lies in the rain shadow of the Southern Andes, enduring cold dry winds and sparse rainfall.",
+    "pano_id": "HPSq7g0S82MfUdAW0eutrA"
+  },
+  {
+    "id": "red_desert_wyoming_hwy",
+    "name": "WYO 789, Continental Divide Basin",
+    "country": "United States",
+    "lat": 42.01317449499768,
+    "lng": -107.9538485483511,
+    "koppen_code": "BSk",
+    "koppen_group": "B",
+    "koppen_name": "Cold Semi-Arid (Steppe) climate",
+    "hints": [
+      "Endless expanse of silver-gray big sagebrush and greasewood",
+      "High plateau elevation (~2,000m) with cold howling winter winds",
+      "Dry steppe receiving 200-300mm annual precipitation with winter snow"
+    ],
+    "explanation": "BSk: Wyoming's intermountain basins feature cold semi-arid steppe climates characterized by freezing winters and dry summers.",
+    "pano_id": "ogV6fZurMk-kdMHFhwIAdw"
+  },
+  {
+    "id": "senegal_n2_sahel",
+    "name": "N2 Highway, Podor Ferlo Transition",
+    "country": "Senegal",
+    "lat": 16.49469838195705,
+    "lng": -14.93284448006497,
+    "koppen_code": "BSh",
+    "koppen_group": "B",
+    "koppen_name": "Hot Semi-Arid (Steppe) climate",
+    "hints": [
+      "Sparse thorny acacia trees on pale sandy-clay soil",
+      "Straw-colored dry annual grass during the 9-month dry period",
+      "Mean annual temperature well above 25\u00b0C with a short summer rain spell"
+    ],
+    "explanation": "BSh: The Sahelian transition zone between the Sahara and savanna experiences high year-round heat and brief semi-arid rainfall.",
+    "pano_id": "c_FryXVUR6a4Xf4o79yYHA"
+  },
+  {
+    "id": "andalucia_montana_pass",
+    "name": "A-369 Serran\u00eda de Ronda Route",
+    "country": "Spain",
+    "lat": 36.62340833980669,
+    "lng": -5.30365821771679,
+    "koppen_code": "Csa",
+    "koppen_group": "C",
+    "koppen_name": "Hot-summer Mediterranean climate",
+    "hints": [
+      "Limestone karst ridges, ancient olive groves, and cork oak woods",
+      "Baked golden-brown summer grass under clear cloudless skies",
+      "Long bone-dry hot summers and mild rainy winters"
+    ],
+    "explanation": "Csa: Classic Mediterranean climate of southern Spain featuring hot, dry summers and wet, temperate winters.",
+    "pano_id": "5_qF0N6YEaTad6105myXgw"
+  },
+  {
+    "id": "crete_white_mountains",
+    "name": "Omalos Plateau Mountain Road, Crete",
+    "country": "Greece",
+    "lat": 35.34071819170118,
+    "lng": 23.90154168707527,
+    "koppen_code": "Csa",
+    "koppen_group": "C",
+    "koppen_name": "Hot-summer Mediterranean climate",
+    "hints": [
+      "Rough limestone crags with aromatic thyme, spiny phrygana, and cypress",
+      "Deep Mediterranean sunlight with zero summer rainfall",
+      "Mild winter frontal storms from the Mediterranean Sea"
+    ],
+    "explanation": "Csa: Island Mediterranean climate with dry, scorching summer months and winter precipitation.",
+    "pano_id": "__OEOKd9X9KCpajGuMjFbA"
+  },
+  {
+    "id": "maule_sclerophyll_chile",
+    "name": "Ruta 126, Coastal Range Sclerophyll Woodland",
+    "country": "Chile",
+    "lat": -35.85125650437259,
+    "lng": -72.29829062476469,
+    "koppen_code": "Csb",
+    "koppen_group": "C",
+    "koppen_name": "Warm-summer Mediterranean climate",
+    "hints": [
+      "Matorral scrub, quillay trees, and espino savanna on rolling hills",
+      "Dry summer conditions tempered by cool Pacific marine winds",
+      "Warmest month averages below 22\u00b0C due to coastal upwelling"
+    ],
+    "explanation": "Csb: Central Chile's coastal range has dry Mediterranean summers moderated by cool Pacific sea breezes.",
+    "pano_id": "pmN5Usq8vrGmQ3bv0BPM3Q"
+  },
+  {
+    "id": "ozark_mark_twain_forest",
+    "name": "MO-19 Ozark Scenic Byway",
+    "country": "United States",
+    "lat": 37.37872811496995,
+    "lng": -91.38008934087236,
+    "koppen_code": "Cfa",
+    "koppen_group": "C",
+    "koppen_name": "Humid Subtropical climate",
+    "hints": [
+      "Dense hardwood forest of white oak, hickory, and shortleaf pine",
+      "Humid, thunderstorm-prone summer days and temperate winters",
+      "Abundant rainfall well-distributed across all four seasons"
+    ],
+    "explanation": "Cfa: The southeastern United States interior features hot, humid summers fueled by Gulf moisture and mild-to-cool winters.",
+    "pano_id": "HEBuPdwZ5v0W-MyVnauOdA"
+  },
+  {
+    "id": "snowy_mountains_subalpine",
+    "name": "Snowy Mountains Highway, Kiandra Plain",
+    "country": "Australia",
+    "lat": -35.85792974606451,
+    "lng": 148.4924456532321,
+    "koppen_code": "Cfb",
+    "koppen_group": "C",
+    "koppen_name": "Temperate Oceanic climate",
+    "hints": [
+      "Rolling subalpine grasslands bordered by twisted snow gums (Eucalyptus pauciflora)",
+      "Lush perennial grass with dependable year-round precipitation",
+      "Cool pleasant summers and cold frosty winters with snow cover"
+    ],
+    "explanation": "Cfb: The Australian Alps receive consistent maritime precipitation year-round with cool, mild summers.",
+    "pano_id": "f1pvcgKj06PSmSufyj1Hkg"
+  },
+  {
+    "id": "wales_elad_valley_moor",
+    "name": "Elan Valley Mountain Road, Cambrian Hills",
+    "country": "United Kingdom",
+    "lat": 52.27002508644723,
+    "lng": -3.650554513287886,
+    "koppen_code": "Cfb",
+    "koppen_group": "C",
+    "koppen_name": "Temperate Oceanic climate",
+    "hints": [
+      "Heather moorland, bracken, and rolling sheep-grazed green fells",
+      "Overcast skies, frequent Atlantic drizzle, and slate stone bridges",
+      "Mild oceanic winters and cool damp summers rarely exceeding 20\u00b0C"
+    ],
+    "explanation": "Cfb: Classic British oceanic climate: heavily moderated by the Atlantic Ocean, high cloudiness, no dry season.",
+    "pano_id": "f0wnNdPT2wcKSN9m0_TtCA"
+  },
+  {
+    "id": "faroe_islands_streymoy",
+    "name": "Route 10, Oyggjarvegur Mountain Route",
+    "country": "Faroe Islands",
+    "lat": 62.08907709211219,
+    "lng": -6.904833620219637,
+    "koppen_code": "Cfc",
+    "koppen_group": "C",
+    "koppen_name": "Subpolar Oceanic climate",
+    "hints": [
+      "Steep, totally treeless basalt mountains plunging into coastal fjords",
+      "Emerald-green peat turf and roaring waterfalls under heavy Atlantic mist",
+      "Cool summer temperatures where warmest month barely reaches 11\u00b0C"
+    ],
+    "explanation": "Cfc: The Faroe Islands have a subpolar oceanic climate with very cool summers, mild wet winters, and relentless ocean winds.",
+    "pano_id": "CAoSF0NJSE0wb2dLRUlDQWdJRHEzZXVBM0FF"
+  },
+  {
+    "id": "badlands_sage_creek",
+    "name": "Sage Creek Basin Road, Badlands",
+    "country": "United States",
+    "lat": 43.89449713422947,
+    "lng": -102.4107803144443,
+    "koppen_code": "Dfa",
+    "koppen_group": "D",
+    "koppen_name": "Hot-summer Humid Continental climate",
+    "hints": [
+      "Layered clay sedimentary badland buttes rising above mixed-grass prairie",
+      "Huge seasonal extremes: -25\u00b0C winter blizzards to +38\u00b0C summer heatwaves",
+      "Warmest summer month averages above 22\u00b0C"
+    ],
+    "explanation": "Dfa: The Northern Great Plains have a hot-summer continental climate with vast temperature swings and freezing winters.",
+    "pano_id": "CAoSF0NJSE0wb2dLRUlDQWdJRHFoWW1kOUFF"
+  },
+  {
+    "id": "karelia_finland_taiga",
+    "name": "Route 88, Lake Ouluj\u00e4rvi Conifer Belt",
+    "country": "Finland",
+    "lat": 64.39845823328622,
+    "lng": 27.18974456561784,
+    "koppen_code": "Dfb",
+    "koppen_group": "D",
+    "koppen_name": "Warm-summer Humid Continental climate",
+    "hints": [
+      "Towering stands of Scots pine, Norway spruce, and silver birch",
+      "Mossy forest floor with glacial granite boulders and dark lake water",
+      "Four distinct seasons with snowy winters and pleasant mild summers"
+    ],
+    "explanation": "Dfb: The central Finnish boreal transition zone has 4+ months above 10\u00b0C, snowy winters, and moderate summer warmth.",
+    "pano_id": "P4tdFqG7NFIu6wQ33WbtLw"
+  },
+  {
+    "id": "rovaniemi_rural_lapland",
+    "name": "Route 79, Lapland Boreal Forest",
+    "country": "Finland",
+    "lat": 66.83742484203769,
+    "lng": 25.14390330479869,
+    "koppen_code": "Dfc",
+    "koppen_group": "D",
+    "koppen_name": "Subarctic (Taiga) climate",
+    "hints": [
+      "Spruce and pine taiga just south of the treeline",
+      "Snow cover lasting from October through May",
+      "Short, cool summer with only 1-2 months averaging above 10\u00b0C"
+    ],
+    "explanation": "Dfc: Lapland's subarctic boreal forest has long, freezing winters and short, cool summer periods.",
+    "pano_id": "CAoSHENJQUJJaEFEeWNLejZoTFNPbWY2RUowQUFRY0U."
+  },
+  {
+    "id": "iceland_ringroad_jokulsarlon",
+    "name": "Route 1, Vatnaj\u00f6kull Glacial Outwash Plain",
+    "country": "Iceland",
+    "lat": 64.05166633517132,
+    "lng": -16.18142130271545,
+    "koppen_code": "ET",
+    "koppen_group": "E",
+    "koppen_name": "Tundra climate",
+    "hints": [
+      "Black volcanic sand, glacial braided streams, and moss-covered moraines",
+      "Massive ice cap and glaciers visible in background; completely treeless",
+      "Warmest month temperature fails to reach 10\u00b0C"
+    ],
+    "explanation": "ET: The coastal outwash plains below Vatnaj\u00f6kull have a tundra climate where maritime Arctic air keeps summer averages below 10\u00b0C.",
+    "pano_id": "CAoSFkNJSE0wb2dLRUlDQWdJRGN5TXoyTnc."
+  },
+  {
+    "id": "passo_dello_stelvio_italy",
+    "name": "SS38 Stelvio Pass Alpine Scree (2,757m)",
+    "country": "Italy",
+    "lat": 46.52862075451429,
+    "lng": 10.45318592694539,
+    "koppen_code": "ET",
+    "koppen_group": "E",
+    "koppen_name": "Alpine Tundra climate",
+    "hints": [
+      "High alpine scree, bare limestone crags, and residual summer snowdrifts",
+      "Far above the Alpine treeline with hardy cushion plants and lichen",
+      "Severe sub-zero winter freeze and short, cold alpine summer (<10\u00b0C)"
+    ],
+    "explanation": "ET: High elevation in the Italian Alps produces an alpine tundra climate matching polar tundra criteria.",
+    "pano_id": "REKWcPo7ZvCjuIdehvdaZg"
+  },
+  {
+    "id": "passo_garibaldi_tierra_del_fuego",
+    "name": "Ruta 3, Paso Garibaldi, Fuegian Andes",
+    "country": "Argentina",
+    "lat": -54.67730982797198,
+    "lng": -67.88554676162855,
+    "koppen_code": "ET",
+    "koppen_group": "E",
+    "koppen_name": "Tundra / Alpine Subpolar climate",
+    "hints": [
+      "Wind-sheared krummholz (stunted southern beech) giving way to rocky scree",
+      "Glacial mountain pass with subantarctic peat bogs and snow patches",
+      "Relentless subantarctic winds; summer temperatures rarely exceed 9\u00b0C"
+    ],
+    "explanation": "ET: High latitude and mountain pass elevation produce a tundra climate with no month averaging above 10\u00b0C.",
+    "pano_id": "CAoSF0NJSE0wb2dLRUlDQWdJQ2Y5djZUN1FF"
+  },
+  {
+    "id": "svalbard_longyearbyen_valley",
+    "name": "Adventdalen Arctic Valley Track",
+    "country": "Norway (Svalbard)",
+    "lat": 78.20171090204312,
+    "lng": 15.82375225922589,
+    "koppen_code": "ET",
+    "koppen_group": "E",
+    "koppen_name": "Tundra climate",
+    "hints": [
+      "Barren high-Arctic permafrost valley framed by flat-topped snowy mountains",
+      "Arctic dwarf willow and polar mosses hugging the gravel ground",
+      "Midnight sun in summer with peak July averages around 5-7\u00b0C"
+    ],
+    "explanation": "ET: High Arctic archipelago (78\u00b0N) where permafrost is continuous and warmest month averages remain between 0\u00b0C and 10\u00b0C.",
+    "pano_id": "CAoSF0NJSE0wb2dLRUlDQWdJREpzc3JTNUFF"
+  }
+]

@@ -1,0 +1,421 @@
+// Köppen Climate Data Definitions
+const KOPPEN_GROUPS = {
+  'A': {
+    name: 'A - Tropical',
+    desc: 'Average temp >= 18°C in all months. No winter freeze. Megathermal flora.',
+    color: '#10b981'
+  },
+  'B': {
+    name: 'B - Arid & Semi-Arid',
+    desc: 'Potential evapotranspiration exceeds rainfall. Xerophytic scrub, steppes, or dunes.',
+    color: '#f59e0b'
+  },
+  'C': {
+    name: 'C - Temperate / Mesothermal',
+    desc: 'Coldest month between -3°C and 18°C. Warm summers, mixed or broadleaf woodland.',
+    color: '#3b82f6'
+  },
+  'D': {
+    name: 'D - Continental / Microthermal',
+    desc: 'Coldest month < -3°C, warmest month > 10°C. Marked freeze-thaw seasonality, taiga/mixed.',
+    color: '#8b5cf6'
+  },
+  'E': {
+    name: 'E - Polar & Alpine',
+    desc: 'Warmest month < 10°C. Treeless tundra, dwarf krummholz, or perpetual frost.',
+    color: '#06b6d4'
+  }
+};
+
+const KOPPEN_CLASSES = [
+  // Group A
+  { code: 'Af', group: 'A', name: 'Tropical Rainforest', summary: 'Constant high temps, precipitation >60mm each month, multi-tiered evergreen canopy.' },
+  { code: 'Am', group: 'A', name: 'Tropical Monsoon', summary: 'Intense rainy season with a short dry interval, high annual totals.' },
+  { code: 'Aw', group: 'A', name: 'Tropical Savanna', summary: 'Pronounced wet summer and bone-dry winter, drought-adapted trees and grassland.' },
+
+  // Group B
+  { code: 'BWh', group: 'B', name: 'Hot Desert', summary: 'Extremely arid, mean annual temp >= 18°C, sparse succulents/gravel plains.' },
+  { code: 'BWk', group: 'B', name: 'Cold Desert', summary: 'Arid, mean annual temp < 18°C, freezing continental winters or cool fog upwelling.' },
+  { code: 'BSh', group: 'B', name: 'Hot Semi-Arid (Steppe)', summary: 'Transitional dry scrub/grassland, mean annual temp >= 18°C.' },
+  { code: 'BSk', group: 'B', name: 'Cold Semi-Arid (Steppe)', summary: 'Steppe with cold snowy winters and dry, warm to hot summers.' },
+
+  // Group C
+  { code: 'Csa', group: 'C', name: 'Hot-summer Mediterranean', summary: 'Hot, dry summers and mild, wet winters; sclerophyllous maquis/olive trees.' },
+  { code: 'Csb', group: 'C', name: 'Warm-summer Mediterranean', summary: 'Dry summers tempered by cool coastal marine fog/currents.' },
+  { code: 'Cfa', group: 'C', name: 'Humid Subtropical', summary: 'Hot humid summers with frequent storms, mild winters without a dry season.' },
+  { code: 'Cfb', group: 'C', name: 'Temperate Oceanic', summary: 'Mild winters and cool-to-warm summers, frequent cloud/drizzle year-round.' },
+  { code: 'Cfc', group: 'C', name: 'Subpolar Oceanic', summary: 'Maritime subpolar with cool short summers (1-3 months >10°C) and mild wet winters.' },
+  { code: 'Cwb', group: 'C', name: 'Subtropical Highland (Dry Winter)', summary: 'Highland temperate climate with wet summers and cool, dry sunny winters.' },
+
+  // Group D
+  { code: 'Dfa', group: 'D', name: 'Hot-summer Humid Continental', summary: 'Snowy cold winters, hot humid summers (>22°C warmest month).' },
+  { code: 'Dfb', group: 'D', name: 'Warm-summer Humid Continental', summary: 'Snowy cold winters, warm mild summers (warmest month <22°C).' },
+  { code: 'Dfc', group: 'D', name: 'Subarctic (Taiga)', summary: 'Very long cold winters, 1-3 short cool summer months; boreal spruce/pine.' },
+  { code: 'Dwa', group: 'D', name: 'Monsoon Hot Continental', summary: 'Monsoon rainy summers and dry, intensely cold Siberian-influenced winters.' },
+  { code: 'Dsb', group: 'D', name: 'Dry-summer Continental', summary: 'Freezing continental winters paired with dry Mediterranean summers in rain shadow.' },
+
+  // Group E
+  { code: 'ET', group: 'E', name: 'Tundra (Polar/Alpine)', summary: 'Treeless moss/lichen/scree terrain; warmest month between 0°C and 10°C.' },
+  { code: 'EF', group: 'E', name: 'Ice Cap', summary: 'Perpetual frost; all 12 months average below 0°C with perpetual ice/snow.' }
+];
+
+// State
+let locations = [];
+let currentIndex = 0;
+let score = 0;
+let totalRounds = 0;
+let streak = 0;
+let bestStreak = 0;
+let roundAnswered = false;
+let currentDifficulty = 'group'; // 'group' (5 main groups) or 'subtype' (detailed Köppen codes)
+let availableLocations = [];
+
+// DOM Elements
+const streetViewFrame = document.getElementById('streetview-frame');
+const directEmbedNotice = document.getElementById('direct-embed-notice');
+const openMapBtn = document.getElementById('open-map-btn');
+const locNameEl = document.getElementById('location-name');
+const locCountryEl = document.getElementById('location-country');
+const locCoordsEl = document.getElementById('location-coords');
+const hintsList = document.getElementById('hints-list');
+const toggleHintsBtn = document.getElementById('toggle-hints-btn');
+const hintsContainer = document.getElementById('hints-container');
+const optionsGrid = document.getElementById('options-grid');
+const resultFeedback = document.getElementById('result-feedback');
+const nextBtn = document.getElementById('next-btn');
+const scoreDisplay = document.getElementById('score-display');
+const streakDisplay = document.getElementById('streak-display');
+const accuracyDisplay = document.getElementById('accuracy-display');
+const roundDisplay = document.getElementById('round-display');
+const explanationCard = document.getElementById('explanation-card');
+const explanationTitle = document.getElementById('explanation-title');
+const explanationBody = document.getElementById('explanation-body');
+const koppenRefBtn = document.getElementById('koppen-ref-btn');
+const refModal = document.getElementById('ref-modal');
+const closeModalBtn = document.getElementById('close-modal-btn');
+const diffGroupRadio = document.getElementById('diff-group');
+const diffSubtypeRadio = document.getElementById('diff-subtype');
+
+// Initialize
+async function init() {
+  try {
+    const res = await fetch('locations.json?t=' + Date.now());
+    locations = await res.json();
+    shuffleArray(locations);
+    availableLocations = [...locations];
+    renderReferenceGuide();
+    setupEventListeners();
+    loadSavedSettings();
+    startNewRound();
+  } catch (err) {
+    console.error('Error loading locations:', err);
+  }
+}
+
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+}
+
+function loadSavedSettings() {
+  const savedDiff = localStorage.getItem('koppen_difficulty');
+  if (savedDiff) {
+    currentDifficulty = savedDiff;
+    if (savedDiff === 'subtype') {
+      diffSubtypeRadio.checked = true;
+    } else {
+      diffGroupRadio.checked = true;
+    }
+  }
+}
+
+function setupEventListeners() {
+  toggleHintsBtn.addEventListener('click', () => {
+    hintsContainer.classList.toggle('hidden');
+    toggleHintsBtn.textContent = hintsContainer.classList.contains('hidden') 
+      ? '💡 Show Botanical & Geographic Hints' 
+      : '🙈 Hide Hints';
+  });
+
+  nextBtn.addEventListener('click', () => {
+    startNewRound();
+  });
+
+  diffGroupRadio.addEventListener('change', () => {
+    currentDifficulty = 'group';
+    localStorage.setItem('koppen_difficulty', 'group');
+    renderOptions();
+  });
+
+  diffSubtypeRadio.addEventListener('change', () => {
+    currentDifficulty = 'subtype';
+    localStorage.setItem('koppen_difficulty', 'subtype');
+    renderOptions();
+  });
+
+  koppenRefBtn.addEventListener('click', () => {
+    refModal.classList.remove('hidden');
+  });
+
+  closeModalBtn.addEventListener('click', () => {
+    refModal.classList.add('hidden');
+  });
+
+  // Close modals on outside click
+  window.addEventListener('click', (e) => {
+    if (e.target === refModal) refModal.classList.add('hidden');
+  });
+}
+
+function startNewRound() {
+  if (availableLocations.length === 0) {
+    availableLocations = [...locations];
+    shuffleArray(availableLocations);
+  }
+
+  const loc = availableLocations.pop();
+  currentIndex = locations.indexOf(loc);
+  roundAnswered = false;
+
+  // Reset UI
+  resultFeedback.classList.add('hidden');
+  resultFeedback.innerHTML = '';
+  explanationCard.classList.add('hidden');
+  nextBtn.disabled = true;
+  nextBtn.classList.add('opacity-50', 'cursor-not-allowed');
+
+  // Hide hints by default
+  hintsContainer.classList.add('hidden');
+  toggleHintsBtn.textContent = '💡 Show Botanical & Geographic Hints';
+
+  // Blind location details during the question to prevent spoiling
+  locNameEl.textContent = '??? Mystery Rural Location ???';
+  locCountryEl.textContent = 'Look closely at the vegetation, canopy density, soil color, and topography';
+  locCoordsEl.textContent = 'Lat/Lng hidden until answered';
+
+  // Lock "Open in Maps" button during guessing to prevent external spoiler
+  openMapBtn.classList.add('opacity-40', 'cursor-not-allowed');
+  openMapBtn.href = 'javascript:void(0)';
+  openMapBtn.title = 'Available after you submit your answer';
+
+  // Update hints
+  hintsList.innerHTML = '';
+  loc.hints.forEach(hint => {
+    const li = document.createElement('li');
+    li.className = 'text-sm text-slate-300 flex items-start gap-2';
+    li.innerHTML = `<span class="text-emerald-400">🌿</span> <span>${hint}</span>`;
+    hintsList.appendChild(li);
+  });
+
+  // Load interactive Street View iframe (no API key required, zero referer errors)
+  const embedUrl = `https://maps.google.com/maps?q=${loc.lat},${loc.lng}&layer=c&cbll=${loc.lat},${loc.lng}&cbp=11,0,0,0,0&output=svembed`;
+  streetViewFrame.src = embedUrl;
+
+  // Render question buttons
+  renderOptions();
+
+  // Update round counter
+  roundDisplay.textContent = totalRounds + 1;
+}
+
+function renderOptions() {
+  optionsGrid.innerHTML = '';
+  const currentLoc = locations[currentIndex];
+
+  if (currentDifficulty === 'group') {
+    // 5 Main Groups: A, B, C, D, E
+    const groups = ['A', 'B', 'C', 'D', 'E'];
+    groups.forEach(grp => {
+      const info = KOPPEN_GROUPS[grp];
+      const btn = document.createElement('button');
+      btn.className = 'option-btn group-btn text-left p-3.5 rounded-xl border border-slate-700 bg-slate-800/80 hover:bg-slate-700/80 hover:border-slate-500 transition duration-150 flex flex-col gap-1 shadow-md';
+      btn.dataset.group = grp;
+      btn.innerHTML = `
+        <div class="flex items-center justify-between w-full">
+          <span class="font-bold text-base text-white flex items-center gap-2">
+            <span class="w-3 h-3 rounded-full inline-block" style="background-color: ${info.color}"></span>
+            ${info.name}
+          </span>
+          <span class="text-xs px-2 py-0.5 rounded bg-slate-900/60 font-mono text-slate-300">Group ${grp}</span>
+        </div>
+        <div class="text-xs text-slate-400 line-clamp-2 leading-relaxed">${info.desc}</div>
+      `;
+      btn.addEventListener('click', () => handleGuess(grp, 'group'));
+      optionsGrid.appendChild(btn);
+    });
+  } else {
+    // Detailed subtypes
+    const correctClass = KOPPEN_CLASSES.find(c => c.code === currentLoc.koppen_code) || {
+      code: currentLoc.koppen_code,
+      group: currentLoc.koppen_group,
+      name: currentLoc.koppen_name,
+      summary: currentLoc.explanation
+    };
+
+    let choices = [correctClass];
+    const others = KOPPEN_CLASSES.filter(c => c.code !== correctClass.code);
+    shuffleArray(others);
+    
+    // Pick 1 from same group if exists
+    const sameGroupOther = others.find(c => c.group === correctClass.group);
+    if (sameGroupOther) {
+      choices.push(sameGroupOther);
+    }
+    
+    // Fill up to 4 choices
+    for (const c of others) {
+      if (choices.length >= 4) break;
+      if (!choices.includes(c)) choices.push(c);
+    }
+
+    shuffleArray(choices);
+
+    choices.forEach(choice => {
+      const btn = document.createElement('button');
+      btn.className = 'option-btn subtype-btn text-left p-3.5 rounded-xl border border-slate-700 bg-slate-800/80 hover:bg-slate-700/80 hover:border-slate-500 transition duration-150 flex flex-col gap-1 shadow-md';
+      btn.dataset.code = choice.code;
+      btn.innerHTML = `
+        <div class="flex items-center justify-between w-full">
+          <span class="font-bold text-base text-white flex items-center gap-2">
+            <span class="font-mono text-emerald-400 font-extrabold bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-800">${choice.code}</span>
+            <span>${choice.name}</span>
+          </span>
+          <span class="text-xs px-2 py-0.5 rounded bg-slate-900/60 font-mono text-slate-400">Grp ${choice.group}</span>
+        </div>
+        <div class="text-xs text-slate-400 line-clamp-2 leading-relaxed">${choice.summary}</div>
+      `;
+      btn.addEventListener('click', () => handleGuess(choice.code, 'subtype'));
+      optionsGrid.appendChild(btn);
+    });
+  }
+}
+
+function handleGuess(userGuess, type) {
+  if (roundAnswered) return;
+  roundAnswered = true;
+
+  const loc = locations[currentIndex];
+  totalRounds++;
+
+  const isCorrect = (type === 'group')
+    ? (userGuess === loc.koppen_group)
+    : (userGuess === loc.koppen_code);
+
+  const optionButtons = optionsGrid.querySelectorAll('.option-btn');
+  optionButtons.forEach(btn => {
+    btn.disabled = true;
+    btn.classList.remove('hover:bg-slate-700/80', 'hover:border-slate-500');
+    
+    const val = type === 'group' ? btn.dataset.group : btn.dataset.code;
+    const correctVal = type === 'group' ? loc.koppen_group : loc.koppen_code;
+
+    if (val === correctVal) {
+      btn.classList.add('border-emerald-500', 'bg-emerald-950/70', 'ring-2', 'ring-emerald-500/50');
+    } else if (val === userGuess && !isCorrect) {
+      btn.classList.add('border-rose-500', 'bg-rose-950/70', 'ring-2', 'ring-rose-500/50');
+    } else {
+      btn.classList.add('opacity-40');
+    }
+  });
+
+  // Reveal location details now that answer is placed
+  locNameEl.innerHTML = `<span class="text-emerald-400 font-semibold">${loc.name}</span>, ${loc.country}`;
+  locCountryEl.textContent = `Coordinates: ${loc.lat.toFixed(4)}°, ${loc.lng.toFixed(4)}°`;
+  locCoordsEl.innerHTML = `Climate: <strong class="text-emerald-300 font-mono">${loc.koppen_code}</strong> (${loc.koppen_name})`;
+
+  // Unlock "Open in Maps" button now
+  const gmapsUrl = `https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${loc.lat},${loc.lng}`;
+  openMapBtn.href = gmapsUrl;
+  openMapBtn.classList.remove('opacity-40', 'cursor-not-allowed');
+  openMapBtn.title = 'View in Google Maps';
+
+  // Update Score & Streak
+  if (isCorrect) {
+    score++;
+    streak++;
+    if (streak > bestStreak) bestStreak = streak;
+    resultFeedback.className = 'p-3 rounded-xl bg-emerald-950/80 border border-emerald-700/60 text-emerald-200 flex items-center justify-between animate-fadeIn';
+    resultFeedback.innerHTML = `
+      <div class="flex items-center gap-2">
+        <span class="text-2xl">🎉</span>
+        <div>
+          <span class="font-bold text-white text-base">Spot on! Excellent deduction!</span>
+          <p class="text-xs text-emerald-300">That is correct: <strong>${loc.koppen_code}</strong> (${loc.koppen_name}).</p>
+        </div>
+      </div>
+      <span class="text-xs font-mono font-bold bg-emerald-800 text-emerald-100 px-2.5 py-1 rounded-full">+1 pt</span>
+    `;
+  } else {
+    streak = 0;
+    const actualAnswer = type === 'group' 
+      ? `Group ${loc.koppen_group} (${KOPPEN_GROUPS[loc.koppen_group].name})`
+      : `${loc.koppen_code} (${loc.koppen_name})`;
+    resultFeedback.className = 'p-3 rounded-xl bg-rose-950/80 border border-rose-700/60 text-rose-200 flex items-center justify-between animate-fadeIn';
+    resultFeedback.innerHTML = `
+      <div class="flex items-center gap-2">
+        <span class="text-2xl">❌</span>
+        <div>
+          <span class="font-bold text-white text-base">Not quite!</span>
+          <p class="text-xs text-rose-300">Correct climate: <strong class="text-white">${actualAnswer}</strong>.</p>
+        </div>
+      </div>
+      <span class="text-xs font-mono bg-rose-900 text-rose-200 px-2.5 py-1 rounded-full">Streak Reset</span>
+    `;
+  }
+
+  resultFeedback.classList.remove('hidden');
+
+  // Reveal Explanation
+  explanationTitle.innerHTML = `Analysis: <span class="text-emerald-400">${loc.name}</span> (<span class="font-mono text-amber-300">${loc.koppen_code}</span>)`;
+  explanationBody.textContent = loc.explanation;
+  explanationCard.classList.remove('hidden');
+
+  // Update Scoreboard
+  scoreDisplay.textContent = score;
+  streakDisplay.textContent = streak;
+  const pct = Math.round((score / totalRounds) * 100);
+  accuracyDisplay.textContent = `${pct}%`;
+
+  // Enable Next button
+  nextBtn.disabled = false;
+  nextBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+  nextBtn.focus();
+}
+
+function renderReferenceGuide() {
+  const guideContainer = document.getElementById('reference-guide-content');
+  guideContainer.innerHTML = '';
+
+  const groups = ['A', 'B', 'C', 'D', 'E'];
+  groups.forEach(gKey => {
+    const gInfo = KOPPEN_GROUPS[gKey];
+    const matchingClasses = KOPPEN_CLASSES.filter(c => c.group === gKey);
+
+    const section = document.createElement('div');
+    section.className = 'mb-6 p-4 rounded-xl bg-slate-800/80 border border-slate-700';
+    section.innerHTML = `
+      <div class="flex items-center gap-2.5 mb-2 pb-2 border-b border-slate-700">
+        <span class="w-4 h-4 rounded-full" style="background-color: ${gInfo.color}"></span>
+        <h4 class="font-bold text-lg text-white">${gInfo.name}</h4>
+      </div>
+      <p class="text-xs text-slate-400 mb-3">${gInfo.desc}</p>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+        ${matchingClasses.map(c => `
+          <div class="bg-slate-900/60 p-2.5 rounded-lg border border-slate-800 text-xs">
+            <div class="font-bold text-white flex items-center gap-1.5 mb-0.5">
+              <span class="font-mono text-emerald-400 bg-emerald-950/60 px-1.5 py-0.2 rounded border border-emerald-800/60">${c.code}</span>
+              <span>${c.name}</span>
+            </div>
+            <p class="text-slate-400 text-[11px] leading-relaxed">${c.summary}</p>
+          </div>
+        `).join('')}
+      </div>
+    `;
+    guideContainer.appendChild(section);
+  });
+}
+
+// Kickoff
+window.addEventListener('DOMContentLoaded', init);
