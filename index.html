@@ -155,34 +155,16 @@
     <!-- Right / Bottom: Question & Guessing Controls (5 cols on lg) -->
     <div class="lg:col-span-5 flex flex-col gap-3.5">
       
-      <!-- Difficulty Toggle Card -->
-      <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-3 flex items-center justify-between">
-        <div class="text-xs font-semibold text-slate-300">Game Mode:</div>
-        <div class="flex items-center gap-1 bg-slate-950 p-1 rounded-lg border border-slate-800 text-xs">
-          <label class="cursor-pointer">
-            <input type="radio" name="difficulty" id="diff-group" value="group" checked class="sr-only peer">
-            <span class="px-2.5 py-1 rounded-md transition peer-checked:bg-emerald-600 peer-checked:text-white text-slate-400 font-medium block">
-              5 Major Groups (A-E)
-            </span>
-          </label>
-          <label class="cursor-pointer">
-            <input type="radio" name="difficulty" id="diff-subtype" value="subtype" class="sr-only peer">
-            <span class="px-2.5 py-1 rounded-md transition peer-checked:bg-emerald-600 peer-checked:text-white text-slate-400 font-medium block">
-              Subtypes (Csa, Dfb...)
-            </span>
-          </label>
-        </div>
-      </div>
-
-      <!-- Hints Accordion -->
+      <!-- Progressive Hints -->
       <div class="bg-slate-900/60 border border-slate-800/80 rounded-xl p-3 shadow-sm">
         <button id="toggle-hints-btn" class="w-full text-left text-xs font-semibold text-emerald-400 hover:text-emerald-300 flex items-center justify-between transition">
-          <span>💡 Show Botanical & Geographic Hints</span>
-          <span class="text-slate-500 text-[10px]">▼</span>
+          <span>💡 Use Hint (3 left)</span>
+          <span class="text-slate-500 text-[10px]">Narrow choices</span>
         </button>
+        <p id="hint-status" class="mt-1 text-[11px] text-slate-500">Each hint reveals a clue and eliminates about half of the wrong answers.</p>
         <div id="hints-container" class="hidden mt-2 pt-2 border-t border-slate-800/80">
           <ul id="hints-list" class="space-y-1.5">
-            <!-- Injected hints -->
+            <!-- Revealed progressively -->
           </ul>
         </div>
       </div>
@@ -191,11 +173,11 @@
       <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 shadow-xl flex flex-col gap-3">
         <div>
           <h3 class="font-bold text-base text-white">What Köppen climate zone is this?</h3>
-          <p class="text-xs text-slate-400 mt-0.5">Deduce the climate zone from the indicator plants, soil, aridity, and latitude:</p>
+          <p class="text-xs text-slate-400 mt-0.5">Choose from every subtype, or spend hints to narrow the field:</p>
         </div>
 
         <!-- Options Container -->
-        <div id="options-grid" class="flex flex-col gap-2 max-h-[300px] overflow-y-auto pr-1">
+        <div id="options-grid" class="grid grid-cols-2 sm:grid-cols-4 gap-2 max-h-[440px] overflow-y-auto pr-1">
           <!-- Dynamically populated buttons -->
         </div>
 

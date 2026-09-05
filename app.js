@@ -78,8 +78,9 @@ let totalRounds = 0;
 let streak = 0;
 let bestStreak = 0;
 let roundAnswered = false;
-let currentDifficulty = 'group'; // 'group' (5 main groups) or 'subtype' (detailed Köppen codes)
 let availableLocations = [];
+let activeSubtypeCodes = [];
+let hintsUsed = 0;
 
 // DOM Elements
 const streetViewFrame = document.getElementById('streetview-frame');
@@ -91,6 +92,7 @@ const locCoordsEl = document.getElementById('location-coords');
 const hintsList = document.getElementById('hints-list');
 const toggleHintsBtn = document.getElementById('toggle-hints-btn');
 const hintsContainer = document.getElementById('hints-container');
+const hintStatus = document.getElementById('hint-status');
 const optionsGrid = document.getElementById('options-grid');
 const resultFeedback = document.getElementById('result-feedback');
 const nextBtn = document.getElementById('next-btn');
@@ -104,8 +106,6 @@ const explanationBody = document.getElementById('explanation-body');
 const koppenRefBtn = document.getElementById('koppen-ref-btn');
 const refModal = document.getElementById('ref-modal');
 const closeModalBtn = document.getElementById('close-modal-btn');
-const diffGroupRadio = document.getElementById('diff-group');
-const diffSubtypeRadio = document.getElementById('diff-subtype');
 
 // Initialize
 async function init() {
@@ -116,7 +116,6 @@ async function init() {
     availableLocations = [...locations];
     renderReferenceGuide();
     setupEventListeners();
-    loadSavedSettings();
     startNewRound();
   } catch (err) {
     console.error('Error loading locations:', err);
@@ -130,40 +129,11 @@ function shuffleArray(array) {
   }
 }
 
-function loadSavedSettings() {
-  const savedDiff = localStorage.getItem('koppen_difficulty');
-  if (savedDiff) {
-    currentDifficulty = savedDiff;
-    if (savedDiff === 'subtype') {
-      diffSubtypeRadio.checked = true;
-    } else {
-      diffGroupRadio.checked = true;
-    }
-  }
-}
-
 function setupEventListeners() {
-  toggleHintsBtn.addEventListener('click', () => {
-    hintsContainer.classList.toggle('hidden');
-    toggleHintsBtn.textContent = hintsContainer.classList.contains('hidden') 
-      ? '💡 Show Botanical & Geographic Hints' 
-      : '🙈 Hide Hints';
-  });
+  toggleHintsBtn.addEventListener('click', useHint);
 
   nextBtn.addEventListener('click', () => {
     startNewRound();
-  });
-
-  diffGroupRadio.addEventListener('change', () => {
-    currentDifficulty = 'group';
-    localStorage.setItem('koppen_difficulty', 'group');
-    renderOptions();
-  });
-
-  diffSubtypeRadio.addEventListener('change', () => {
-    currentDifficulty = 'subtype';
-    localStorage.setItem('koppen_difficulty', 'subtype');
-    renderOptions();
   });
 
   koppenRefBtn.addEventListener('click', () => {
@@ -197,9 +167,15 @@ function startNewRound() {
   nextBtn.disabled = true;
   nextBtn.classList.add('opacity-50', 'cursor-not-allowed');
 
-  // Hide hints by default
+  // Reset progressive hints and start with every subtype available
+  activeSubtypeCodes = KOPPEN_CLASSES.map(climate => climate.code);
+  hintsUsed = 0;
+  hintsList.innerHTML = '';
   hintsContainer.classList.add('hidden');
-  toggleHintsBtn.textContent = '💡 Show Botanical & Geographic Hints';
+  hintStatus.textContent = 'Each hint reveals a clue and eliminates about half of the wrong answers.';
+  toggleHintsBtn.disabled = false;
+  toggleHintsBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+  updateHintButton();
 
   // Blind location details during the question to prevent spoiling
   locNameEl.textContent = '??? Mystery Rural Location ???';
@@ -210,15 +186,6 @@ function startNewRound() {
   openMapBtn.classList.add('opacity-40', 'cursor-not-allowed');
   openMapBtn.href = 'javascript:void(0)';
   openMapBtn.title = 'Available after you submit your answer';
-
-  // Update hints
-  hintsList.innerHTML = '';
-  loc.hints.forEach(hint => {
-    const li = document.createElement('li');
-    li.className = 'text-sm text-slate-300 flex items-start gap-2';
-    li.innerHTML = `<span class="text-emerald-400">🌿</span> <span>${hint}</span>`;
-    hintsList.appendChild(li);
-  });
 
   // Load interactive Street View iframe (no API key required, zero referer errors)
   const embedUrl = loc.pano_id 
@@ -235,94 +202,76 @@ function startNewRound() {
 
 function renderOptions() {
   optionsGrid.innerHTML = '';
-  const currentLoc = locations[currentIndex];
-
-  if (currentDifficulty === 'group') {
-    // 5 Main Groups: A, B, C, D, E
-    const groups = ['A', 'B', 'C', 'D', 'E'];
-    groups.forEach(grp => {
-      const info = KOPPEN_GROUPS[grp];
+  KOPPEN_CLASSES
+    .filter(choice => activeSubtypeCodes.includes(choice.code))
+    .forEach(choice => {
       const btn = document.createElement('button');
-      btn.className = 'option-btn group-btn text-left p-3.5 rounded-xl border border-slate-700 bg-slate-800/80 hover:bg-slate-700/80 hover:border-slate-500 transition duration-150 flex flex-col gap-1 shadow-md';
-      btn.dataset.group = grp;
-      btn.innerHTML = `
-        <div class="flex items-center justify-between w-full">
-          <span class="font-bold text-base text-white flex items-center gap-2">
-            <span class="w-3 h-3 rounded-full inline-block" style="background-color: ${info.color}"></span>
-            ${info.name}
-          </span>
-          <span class="text-xs px-2 py-0.5 rounded bg-slate-900/60 font-mono text-slate-300">Group ${grp}</span>
-        </div>
-        <div class="text-xs text-slate-400 line-clamp-2 leading-relaxed">${info.desc}</div>
-      `;
-      btn.addEventListener('click', () => handleGuess(grp, 'group'));
-      optionsGrid.appendChild(btn);
-    });
-  } else {
-    // Detailed subtypes
-    const correctClass = KOPPEN_CLASSES.find(c => c.code === currentLoc.koppen_code) || {
-      code: currentLoc.koppen_code,
-      group: currentLoc.koppen_group,
-      name: currentLoc.koppen_name,
-      summary: currentLoc.explanation
-    };
-
-    let choices = [correctClass];
-    const others = KOPPEN_CLASSES.filter(c => c.code !== correctClass.code);
-    shuffleArray(others);
-    
-    // Pick 1 from same group if exists
-    const sameGroupOther = others.find(c => c.group === correctClass.group);
-    if (sameGroupOther) {
-      choices.push(sameGroupOther);
-    }
-    
-    // Fill up to 4 choices
-    for (const c of others) {
-      if (choices.length >= 4) break;
-      if (!choices.includes(c)) choices.push(c);
-    }
-
-    shuffleArray(choices);
-
-    choices.forEach(choice => {
-      const btn = document.createElement('button');
-      btn.className = 'option-btn subtype-btn text-left p-3.5 rounded-xl border border-slate-700 bg-slate-800/80 hover:bg-slate-700/80 hover:border-slate-500 transition duration-150 flex flex-col gap-1 shadow-md';
+      btn.className = 'option-btn subtype-btn min-h-12 p-2 rounded-lg border border-slate-700 bg-slate-800/80 hover:bg-slate-700/80 hover:border-slate-500 transition duration-150 flex items-center justify-center text-center shadow-sm';
       btn.dataset.code = choice.code;
+      btn.title = `${choice.name}: ${choice.summary}`;
+      btn.setAttribute('aria-label', `${choice.code}: ${choice.name}`);
       btn.innerHTML = `
-        <div class="flex items-center justify-between w-full">
-          <span class="font-bold text-base text-white flex items-center gap-2">
-            <span class="font-mono text-emerald-400 font-extrabold bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-800">${choice.code}</span>
-            <span>${choice.name}</span>
-          </span>
-          <span class="text-xs px-2 py-0.5 rounded bg-slate-900/60 font-mono text-slate-400">Grp ${choice.group}</span>
-        </div>
-        <div class="text-xs text-slate-400 line-clamp-2 leading-relaxed">${choice.summary}</div>
+        <span class="font-mono text-base text-emerald-400 font-extrabold">${choice.code}</span>
       `;
-      btn.addEventListener('click', () => handleGuess(choice.code, 'subtype'));
+      btn.addEventListener('click', () => handleGuess(choice.code));
       optionsGrid.appendChild(btn);
     });
+}
+
+function useHint() {
+  const loc = locations[currentIndex];
+  if (roundAnswered || hintsUsed >= loc.hints.length) return;
+
+  const wrongCodes = activeSubtypeCodes.filter(code => code !== loc.koppen_code);
+  shuffleArray(wrongCodes);
+  const targetChoiceCount = Math.ceil(activeSubtypeCodes.length / 2);
+  const wrongCodesToKeep = new Set(wrongCodes.slice(0, targetChoiceCount - 1));
+  activeSubtypeCodes = activeSubtypeCodes.filter(code =>
+    code === loc.koppen_code || wrongCodesToKeep.has(code)
+  );
+
+  const li = document.createElement('li');
+  li.className = 'text-sm text-slate-300 flex items-start gap-2 animate-fadeIn';
+  li.innerHTML = `<span class="text-emerald-400">🌿</span> <span>${loc.hints[hintsUsed]}</span>`;
+  hintsList.appendChild(li);
+  hintsContainer.classList.remove('hidden');
+
+  hintsUsed++;
+  hintStatus.textContent = `${activeSubtypeCodes.length} possible climates remain.`;
+  updateHintButton();
+  renderOptions();
+}
+
+function updateHintButton() {
+  const hintsLeft = locations[currentIndex].hints.length - hintsUsed;
+  toggleHintsBtn.querySelector('span:first-child').textContent = hintsLeft > 0
+    ? `💡 Use Hint (${hintsLeft} left)`
+    : '💡 All hints used';
+
+  if (hintsLeft === 0) {
+    toggleHintsBtn.disabled = true;
+    toggleHintsBtn.classList.add('opacity-50', 'cursor-not-allowed');
   }
 }
 
-function handleGuess(userGuess, type) {
+function handleGuess(userGuess) {
   if (roundAnswered) return;
   roundAnswered = true;
 
   const loc = locations[currentIndex];
   totalRounds++;
 
-  const isCorrect = (type === 'group')
-    ? (userGuess === loc.koppen_group)
-    : (userGuess === loc.koppen_code);
+  const isCorrect = userGuess === loc.koppen_code;
+  toggleHintsBtn.disabled = true;
+  toggleHintsBtn.classList.add('opacity-50', 'cursor-not-allowed');
 
   const optionButtons = optionsGrid.querySelectorAll('.option-btn');
   optionButtons.forEach(btn => {
     btn.disabled = true;
     btn.classList.remove('hover:bg-slate-700/80', 'hover:border-slate-500');
     
-    const val = type === 'group' ? btn.dataset.group : btn.dataset.code;
-    const correctVal = type === 'group' ? loc.koppen_group : loc.koppen_code;
+    const val = btn.dataset.code;
+    const correctVal = loc.koppen_code;
 
     if (val === correctVal) {
       btn.classList.add('border-emerald-500', 'bg-emerald-950/70', 'ring-2', 'ring-emerald-500/50');
@@ -362,9 +311,7 @@ function handleGuess(userGuess, type) {
     `;
   } else {
     streak = 0;
-    const actualAnswer = type === 'group' 
-      ? `Group ${loc.koppen_group} (${KOPPEN_GROUPS[loc.koppen_group].name})`
-      : `${loc.koppen_code} (${loc.koppen_name})`;
+    const actualAnswer = `${loc.koppen_code} (${loc.koppen_name})`;
     resultFeedback.className = 'p-3 rounded-xl bg-rose-950/80 border border-rose-700/60 text-rose-200 flex items-center justify-between animate-fadeIn';
     resultFeedback.innerHTML = `
       <div class="flex items-center gap-2">

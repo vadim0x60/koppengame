@@ -7,15 +7,8 @@ A GeoGuessr-inspired geography and climatology game that drops you into a myster
 ## ✨ Features
 
 - **Interactive 360° Street View**: Look around, pan, zoom, and inspect flora, soil, topography, sunlight angle, and architecture.
-- **Two Difficulty Modes**:
-  - **5 Major Groups (A-E)**:
-    - `A`: Tropical (Rainforest, Monsoon, Savanna)
-    - `B`: Arid & Semi-Arid (Deserts, Steppes)
-    - `C`: Temperate (Mediterranean, Oceanic, Humid Subtropical)
-    - `D`: Continental (Humid Continental, Subarctic / Taiga)
-    - `E`: Polar & Alpine (Tundra, Ice Cap)
-  - **Subtypes**: Specific codes such as `Csa`, `Dfb`, `BWh`, `ET`, `Am`, etc.
-- **Botanical & Geographic Hints**: Expandable hints pointing out biomes, indicator plants (e.g. eucalypts, creosote, spruce, olive groves, fynbos), and latitude cues without spoiling the answer.
+- **Hardcore Classification**: Every round starts with all 31 specific Köppen subtypes, such as `Csa`, `Dfb`, `BWh`, `ET`, and `Am`.
+- **Progressive Lifeline Hints**: Use up to three botanical and geographic clues per round. Each hint also safely eliminates about half of the remaining wrong answers, narrowing the field from 31 choices to 16, then 8, then 4.
 - **Full Educational Explanations**: Detailed breakdown after each guess showing why that region has that specific Köppen code (temperature thresholds, rainfall seasonality, ocean currents, rain shadows).
 - **In-Game Reference Guide**: A built-in modal with quick summaries of the entire Köppen classification scheme.
 - **Stats & Streaks**: Tracks rounds, current streak, high streak, and overall accuracy.
