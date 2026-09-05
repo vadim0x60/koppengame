@@ -38,13 +38,97 @@
     ::-webkit-scrollbar-thumb:hover {
       background: #475569;
     }
+
+    /* Let the panorama consume the viewport while keeping the controls readable. */
+    .game-shell {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) clamp(340px, 26vw, 500px);
+      gap: 0.75rem;
+      width: 100%;
+      min-height: 0;
+      padding: 0.75rem;
+      overflow: hidden;
+    }
+    .view-column,
+    .control-column,
+    .question-panel,
+    #options-grid {
+      min-height: 0;
+    }
+    .control-column {
+      overflow-y: auto;
+    }
+    #options-grid {
+      max-height: none;
+    }
+    .location-overlay {
+      max-width: min(720px, calc(100% - 1.5rem));
+    }
+    .panorama-controls {
+      bottom: 2.75rem;
+    }
+
+    @media (max-width: 1023px) {
+      body {
+        height: auto;
+        min-height: 100%;
+        overflow-y: auto;
+      }
+      .game-shell {
+        grid-template-columns: minmax(0, 1fr);
+        flex: none;
+        overflow: visible;
+      }
+      .view-column {
+        height: min(65svh, 680px);
+        min-height: 420px;
+      }
+      #pano-container {
+        height: 100%;
+      }
+      .control-column {
+        overflow: visible;
+      }
+      #options-grid {
+        max-height: 440px;
+      }
+    }
+
+    @media (max-width: 639px) {
+      .site-header {
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
+      }
+      .site-header-inner {
+        flex-wrap: wrap;
+        row-gap: 0.5rem;
+      }
+      .brand-subtitle {
+        display: none;
+      }
+      .stats-bar {
+        order: 3;
+        width: 100%;
+        justify-content: center;
+      }
+      .view-column {
+        height: 58svh;
+        min-height: 360px;
+      }
+      .location-overlay {
+        max-width: calc(100% - 1rem);
+      }
+      .pan-instruction span:last-child {
+        display: none;
+      }
+    }
   </style>
 </head>
 <body class="h-full flex flex-col overflow-x-hidden bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950">
 
   <!-- Header -->
-  <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-20 px-4 py-3 sm:px-6">
-    <div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
+  <header class="site-header border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-20 px-4 py-3 sm:px-6">
+    <div class="site-header-inner w-full mx-auto flex items-center justify-between gap-4">
       <div class="flex items-center gap-3">
         <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-400 flex items-center justify-center shadow-lg shadow-emerald-500/20">
           <span class="text-xl">🌍</span>
@@ -53,12 +137,12 @@
           <h1 class="text-lg sm:text-xl font-extrabold tracking-tight bg-gradient-to-r from-emerald-400 via-teal-300 to-sky-400 bg-clip-text text-transparent">
             Köppen Climate Guessr
           </h1>
-          <p class="text-xs text-slate-400">Identify the climate zone from 360° flora, terrain, & atmosphere</p>
+          <p class="brand-subtitle text-xs text-slate-400">Identify the climate zone from 360° flora, terrain, & atmosphere</p>
         </div>
       </div>
 
       <!-- Stats Bar -->
-      <div class="flex items-center gap-3 sm:gap-6 bg-slate-800/80 px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl border border-slate-700/60 shadow-inner">
+      <div class="stats-bar flex items-center gap-3 sm:gap-6 bg-slate-800/80 px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl border border-slate-700/60 shadow-inner">
         <div class="text-center">
           <div class="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Round</div>
           <div id="round-display" class="font-mono text-sm sm:text-base font-extrabold text-white">1</div>
@@ -94,13 +178,13 @@
   </header>
 
   <!-- Main Game Layout -->
-  <main class="flex-1 max-w-7xl w-full mx-auto p-3 sm:p-6 grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6 min-h-0">
+  <main class="game-shell flex-1">
     
-    <!-- Left / Top: Interactive Street View (7 cols on lg) -->
-    <div class="lg:col-span-7 flex flex-col gap-3 min-h-[420px] lg:min-h-0">
+    <!-- Left / Top: Interactive Street View -->
+    <div class="view-column flex flex-col">
       
       <!-- Street View Container -->
-      <div id="pano-container" class="relative flex-1 w-full rounded-2xl overflow-hidden bg-slate-900 border border-slate-800 shadow-2xl flex flex-col min-h-[380px] lg:min-h-[460px]">
+      <div id="pano-container" class="relative flex-1 w-full rounded-2xl overflow-hidden bg-slate-900 border border-slate-800 shadow-2xl flex flex-col">
         
         <!-- Interactive svembed iframe (Zero API keys needed, works anywhere) -->
         <iframe 
@@ -112,9 +196,23 @@
           src="about:blank">
         </iframe>
 
+        <!-- Mystery Location Status -->
+        <div class="location-overlay absolute top-3 left-3 z-10 bg-slate-900/90 backdrop-blur-md border border-slate-700/80 rounded-xl px-3 py-2.5 flex items-center gap-3 shadow-xl pointer-events-none">
+          <div class="w-8 h-8 rounded-lg bg-emerald-950 border border-emerald-800/80 flex items-center justify-center text-emerald-400 font-bold shrink-0">
+            📍
+          </div>
+          <div class="min-w-0">
+            <h2 id="location-name" class="font-bold text-sm text-white truncate">??? Mystery Rural Location ???</h2>
+            <p id="location-country" class="text-[11px] text-slate-300 truncate">Look closely at the vegetation, canopy density, and terrain</p>
+            <div id="location-coords" class="text-[10px] font-mono text-slate-400 truncate">
+              Lat/Lng hidden until answered
+            </div>
+          </div>
+        </div>
+
         <!-- Bottom Overlay Controls on Street View -->
-        <div class="absolute bottom-3 left-3 right-3 flex items-center justify-between pointer-events-none gap-2 z-10">
-          <div class="bg-slate-900/90 backdrop-blur-md px-3 py-1.5 rounded-lg border border-slate-700/80 text-[11px] text-slate-300 pointer-events-auto flex items-center gap-1.5 shadow-lg">
+        <div class="panorama-controls absolute left-3 right-3 flex items-center justify-between pointer-events-none gap-2 z-10">
+          <div class="pan-instruction bg-slate-900/90 backdrop-blur-md px-3 py-1.5 rounded-lg border border-slate-700/80 text-[11px] text-slate-300 pointer-events-auto flex items-center gap-1.5 shadow-lg">
             <span>🧭</span>
             <span>Drag inside frame for 360° pan & zoom</span>
           </div>
@@ -133,27 +231,10 @@
           <span class="text-slate-400">Anti-spoiler active: location details obscured</span>
         </div>
       </div>
-
-      <!-- Mystery Location Status Card -->
-      <div class="bg-slate-900/90 border border-slate-800/90 rounded-xl p-3.5 flex items-center justify-between shadow-md">
-        <div class="flex items-center gap-3 min-w-0">
-          <div class="w-8 h-8 rounded-lg bg-emerald-950 border border-emerald-800/80 flex items-center justify-center text-emerald-400 font-bold shrink-0">
-            📍
-          </div>
-          <div class="min-w-0">
-            <h2 id="location-name" class="font-bold text-sm sm:text-base text-white truncate">??? Mystery Rural Location ???</h2>
-            <p id="location-country" class="text-xs text-slate-400 truncate">Look closely at the vegetation, canopy density, and terrain</p>
-          </div>
-        </div>
-        <div id="location-coords" class="text-right text-xs font-mono text-slate-400 shrink-0 ml-2">
-          Lat/Lng hidden until answered
-        </div>
-      </div>
-
     </div>
 
-    <!-- Right / Bottom: Question & Guessing Controls (5 cols on lg) -->
-    <div class="lg:col-span-5 flex flex-col gap-3.5">
+    <!-- Right / Bottom: Question & Guessing Controls -->
+    <div class="control-column flex flex-col gap-3">
       
       <!-- Progressive Hints -->
       <div class="bg-slate-900/60 border border-slate-800/80 rounded-xl p-3 shadow-sm">
@@ -170,14 +251,14 @@
       </div>
 
       <!-- Question Panel -->
-      <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 shadow-xl flex flex-col gap-3">
+      <div class="question-panel bg-slate-900/90 border border-slate-800 rounded-2xl p-4 shadow-xl flex flex-col gap-3 flex-1">
         <div>
           <h3 class="font-bold text-base text-white">What Köppen climate zone is this?</h3>
           <p class="text-xs text-slate-400 mt-0.5">Choose from every subtype, or spend hints to narrow the field:</p>
         </div>
 
         <!-- Options Container -->
-        <div id="options-grid" class="grid grid-cols-2 sm:grid-cols-4 gap-2 max-h-[440px] overflow-y-auto pr-1">
+        <div id="options-grid" class="grid grid-cols-2 sm:grid-cols-4 gap-2 overflow-y-auto pr-1 content-start flex-1">
           <!-- Dynamically populated buttons -->
         </div>
 
