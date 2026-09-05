@@ -31,7 +31,8 @@ const KOPPEN_CLASSES = [
   // Group A
   { code: 'Af', group: 'A', name: 'Tropical Rainforest', summary: 'Constant high temps, precipitation >60mm each month, multi-tiered evergreen canopy.' },
   { code: 'Am', group: 'A', name: 'Tropical Monsoon', summary: 'Intense rainy season with a short dry interval, high annual totals.' },
-  { code: 'Aw', group: 'A', name: 'Tropical Savanna', summary: 'Pronounced wet summer and bone-dry winter, drought-adapted trees and grassland.' },
+  { code: 'Aw', group: 'A', name: 'Tropical Savanna (Wet/Dry)', summary: 'Pronounced wet summer and bone-dry winter, drought-adapted trees and grassland.' },
+  { code: 'As', group: 'A', name: 'Tropical Savanna (Dry Summer)', summary: 'Tropical climate with a dry season during high-sun summer months.' },
 
   // Group B
   { code: 'BWh', group: 'B', name: 'Hot Desert', summary: 'Extremely arid, mean annual temp >= 18°C, sparse succulents/gravel plains.' },
@@ -42,17 +43,27 @@ const KOPPEN_CLASSES = [
   // Group C
   { code: 'Csa', group: 'C', name: 'Hot-summer Mediterranean', summary: 'Hot, dry summers and mild, wet winters; sclerophyllous maquis/olive trees.' },
   { code: 'Csb', group: 'C', name: 'Warm-summer Mediterranean', summary: 'Dry summers tempered by cool coastal marine fog/currents.' },
+  { code: 'Csc', group: 'C', name: 'Cold-summer Mediterranean', summary: 'Highland dry summer climate with short, cool summers.' },
   { code: 'Cfa', group: 'C', name: 'Humid Subtropical', summary: 'Hot humid summers with frequent storms, mild winters without a dry season.' },
   { code: 'Cfb', group: 'C', name: 'Temperate Oceanic', summary: 'Mild winters and cool-to-warm summers, frequent cloud/drizzle year-round.' },
   { code: 'Cfc', group: 'C', name: 'Subpolar Oceanic', summary: 'Maritime subpolar with cool short summers (1-3 months >10°C) and mild wet winters.' },
+  { code: 'Cwa', group: 'C', name: 'Monsoon Humid Subtropical', summary: 'Hot wet summers driven by monsoon winds, paired with mild dry winters.' },
   { code: 'Cwb', group: 'C', name: 'Subtropical Highland (Dry Winter)', summary: 'Highland temperate climate with wet summers and cool, dry sunny winters.' },
+  { code: 'Cwc', group: 'C', name: 'Cold Subtropical Highland', summary: 'High elevation tropical highlands with short, cool summers.' },
 
   // Group D
   { code: 'Dfa', group: 'D', name: 'Hot-summer Humid Continental', summary: 'Snowy cold winters, hot humid summers (>22°C warmest month).' },
   { code: 'Dfb', group: 'D', name: 'Warm-summer Humid Continental', summary: 'Snowy cold winters, warm mild summers (warmest month <22°C).' },
   { code: 'Dfc', group: 'D', name: 'Subarctic (Taiga)', summary: 'Very long cold winters, 1-3 short cool summer months; boreal spruce/pine.' },
+  { code: 'Dfd', group: 'D', name: 'Extremely Cold Subarctic', summary: 'Extreme subarctic climate with coldest month below -38°C.' },
   { code: 'Dwa', group: 'D', name: 'Monsoon Hot Continental', summary: 'Monsoon rainy summers and dry, intensely cold Siberian-influenced winters.' },
-  { code: 'Dsb', group: 'D', name: 'Dry-summer Continental', summary: 'Freezing continental winters paired with dry Mediterranean summers in rain shadow.' },
+  { code: 'Dwb', group: 'D', name: 'Monsoon Warm Continental', summary: 'Warm rainy summer monsoon and dry, freezing continental winters.' },
+  { code: 'Dwc', group: 'D', name: 'Monsoon Subarctic', summary: 'Subarctic taiga with dry freezing winters and short monsoonal summers.' },
+  { code: 'Dwd', group: 'D', name: 'Extremely Cold Monsoon Subarctic', summary: 'Extreme Siberian winter cold (coldest month <-38°C) and dry winters.' },
+  { code: 'Dsa', group: 'D', name: 'Hot-summer Mediterranean Continental', summary: 'Continental freezing winters paired with hot dry Mediterranean summers.' },
+  { code: 'Dsb', group: 'D', name: 'Warm-summer Mediterranean Continental', summary: 'Freezing continental winters paired with dry Mediterranean summers in rain shadow.' },
+  { code: 'Dsc', group: 'D', name: 'Dry-summer Subarctic', summary: 'High-latitude or alpine subarctic with brief dry summer.' },
+  { code: 'Dsd', group: 'D', name: 'Extremely Cold Dry-summer Subarctic', summary: 'Extreme winter cold paired with dry summer drought.' },
 
   // Group E
   { code: 'ET', group: 'E', name: 'Tundra (Polar/Alpine)', summary: 'Treeless moss/lichen/scree terrain; warmest month between 0°C and 10°C.' },
@@ -210,7 +221,9 @@ function startNewRound() {
   });
 
   // Load interactive Street View iframe (no API key required, zero referer errors)
-  const embedUrl = `https://maps.google.com/maps?q=${loc.lat},${loc.lng}&layer=c&cbll=${loc.lat},${loc.lng}&cbp=11,0,0,0,0&output=svembed`;
+  const embedUrl = loc.pano_id 
+    ? `https://maps.google.com/maps?layer=c&panoid=${loc.pano_id}&cbp=11,0,0,0,0&output=svembed`
+    : `https://maps.google.com/maps?q=${loc.lat},${loc.lng}&layer=c&cbll=${loc.lat},${loc.lng}&cbp=11,0,0,0,0&output=svembed`;
   streetViewFrame.src = embedUrl;
 
   // Render question buttons
