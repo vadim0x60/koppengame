@@ -1,28 +1,40 @@
-# 🌍 Köppen Climate Zone Guessr
+# Visual climate classification
 
-A GeoGuessr-inspired geography and climatology game that drops you into a mystery Google Street View location anywhere on Earth and challenges you to deduce its **Köppen climate classification**.
+Research into what photographs reveal about long-term climate, which visual cues
+support that inference, and where it fails. This repository holds two complementary
+projects—not a competition to maximize game scores:
 
-🎮 **Play Online**: [https://vadim0x60.github.io/koppengame/](https://vadim0x60.github.io/koppengame/)
+- **[game/](game/README.md)** — Köppen Climate Zone Guessr, an educational Street
+  View game and potential interface for future controlled human studies.
+- **[koppenmodel/](koppenmodel/README.md)** — the research plan for image-only
+  climate classification using licensed geotagged photos, plus offline metadata
+  auditing tools. Collection and training are not implemented or run yet.
 
-## ✨ Features
+## Play and develop
 
-- **Interactive 360° Street View**: Look around, pan, zoom, and inspect flora, soil, topography, sunlight angle, and architecture.
-- **50/50 Hints**: Use up to three botanical and geographic clues per round. Each hint also safely eliminates about half of the remaining wrong answers, narrowing the field from 31 choices to 16, then 8, then 4.
-- **Full Educational Explanations**: Detailed breakdown after each guess showing why that region has that specific Köppen code (temperature thresholds, rainfall seasonality, ocean currents, rain shadows).
-- **In-Game Reference Guide**: A built-in modal with quick summaries of the entire Köppen classification scheme.
-- **Stats & Streaks**: Tracks rounds, current streak, high streak, and overall accuracy.
-- **Zero Configuration Required**: Works out-of-the-box in any modern browser. Supports an optional custom Google Maps API key if you want to use the official Maps Embed API.
-- **Massive Global Location Pool**: Over 2,600 verified global Street View panoramas sampled from the open-source GeoGuessr world pool and cross-referenced with high-resolution Köppen climatology rasters, balanced across all major climate groups and subtypes.
+[Play online](https://vadim0x60.github.io/koppengame/).
+The existing URL redirects to `game/`; GitHub Pages still serves the root of
+`master`, with no build step or Pages configuration change required.
 
-## 🚀 How to Run
+From the repository root, run `python3 server.py` to serve the repository on port
+8000. The root page redirects to the game, whose assets and data live together in
+`game/`. In an Amp orb, run `amp orb services ensure` and open its returned portal.
 
-1. Start the local server:
-   ```bash
-   python3 server.py
-   ```
-2. Open your browser and navigate to:
-   ```
-   http://localhost:8000
-   ```
+The legacy game data-generation and API diagnostic scripts remain in `game/`.
+Run them **from that directory** because their data paths are relative to the
+working directory. They can make network requests and overwrite datasets; they
+are not the offline test suite and must not be run as part of routine validation.
 
-Enjoy testing your geography and climate knowledge!
+## Modeling: offline checks only
+
+Python 3.10+, standard library only. From `koppenmodel/`:
+
+```sh
+python3 -m unittest discover -s tests -v
+python3 prepare.py --game ../game --output /tmp/koppen-audit.json
+```
+
+The audit output path must not already exist. The research plan describes future
+photo filtering, labeling, geographic splits, training, and evaluation. No imagery
+or model weights are bundled. The source [MIT license](LICENSE) does not grant
+rights to third-party imagery; each dataset requires its own rights review.

@@ -1,0 +1,137 @@
+{
+  "schema_version": 1,
+  "status": "metadata_only_no_imagery_verified",
+  "rows": 2628,
+  "selectable_codes": [
+    "Af",
+    "Am",
+    "Aw/As",
+    "BWh",
+    "BWk",
+    "BSh",
+    "BSk",
+    "Csa",
+    "Csb",
+    "Csc",
+    "Cfa",
+    "Cfb",
+    "Cfc",
+    "Cwa",
+    "Cwb",
+    "Cwc",
+    "Dfa",
+    "Dfb",
+    "Dfc",
+    "Dfd",
+    "Dwa",
+    "Dwb",
+    "Dwc",
+    "Dwd",
+    "Dsa",
+    "Dsb",
+    "Dsc",
+    "Dsd",
+    "ET",
+    "EF"
+  ],
+  "raw_class_counts": {
+    "Af": 100,
+    "Am": 100,
+    "As": 100,
+    "Aw": 100,
+    "BSh": 100,
+    "BSk": 100,
+    "BWh": 100,
+    "BWk": 100,
+    "Cfa": 100,
+    "Cfb": 100,
+    "Cfc": 100,
+    "Csa": 100,
+    "Csb": 100,
+    "Csc": 41,
+    "Cwa": 100,
+    "Cwb": 100,
+    "Cwc": 86,
+    "Dfa": 100,
+    "Dfb": 100,
+    "Dfc": 100,
+    "Dsa": 100,
+    "Dsb": 100,
+    "Dsc": 100,
+    "Dwa": 100,
+    "Dwb": 100,
+    "Dwc": 100,
+    "EF": 1,
+    "ET": 100
+  },
+  "game_class_counts": {
+    "Af": 100,
+    "Am": 100,
+    "Aw/As": 200,
+    "BWh": 100,
+    "BWk": 100,
+    "BSh": 100,
+    "BSk": 100,
+    "Csa": 100,
+    "Csb": 100,
+    "Csc": 41,
+    "Cfa": 100,
+    "Cfb": 100,
+    "Cfc": 100,
+    "Cwa": 100,
+    "Cwb": 100,
+    "Cwc": 86,
+    "Dfa": 100,
+    "Dfb": 100,
+    "Dfc": 100,
+    "Dfd": 0,
+    "Dwa": 100,
+    "Dwb": 100,
+    "Dwc": 100,
+    "Dwd": 0,
+    "Dsa": 100,
+    "Dsb": 100,
+    "Dsc": 100,
+    "Dsd": 0,
+    "ET": 100,
+    "EF": 1
+  },
+  "absent_game_classes": [
+    "Dfd",
+    "Dwd",
+    "Dsd"
+  ],
+  "classes_below_three_sites": {
+    "EF": 1
+  },
+  "missing_pano_ids": 0,
+  "duplicates": {
+    "id": {
+      "groups": 0,
+      "excess_rows": 0
+    },
+    "pano_id": {
+      "groups": 0,
+      "excess_rows": 0
+    },
+    "coordinates": {
+      "groups": 0,
+      "excess_rows": 0
+    }
+  },
+  "contradictory_pano_labels": {},
+  "four_view_budget": {
+    "images_before_deduplication": 10512,
+    "estimated_bytes_at_200kb": 2102400000,
+    "estimated_bytes_at_500kb": 5256000000
+  },
+  "limitations": [
+    "Exact identity audit only; no near-duplicate or geographic split check.",
+    "Coordinates, labels, panorama availability and imagery rights unverified.",
+    "No imagery acquired; no train/validation/test assignment made."
+  ],
+  "source_sha256": {
+    "locations.json": "fec55d8a6ab4ffe8de23a1d8b7b53160a162b070980b7c73d378f5fd12964dbb",
+    "app.js": "943a772cba24761d3d65e7fcb46c516986bdf7e0507341803cee5e9477138a3a"
+  }
+}
