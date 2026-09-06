@@ -1,0 +1,4 @@
+services:
+  web:
+    command: python3 server.py
+    port: 8000

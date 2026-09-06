@@ -44,3 +44,7 @@ Thumbs.db
 .vscode/
 *.swp
 *.swo
+
+# Amp portal artifacts
+.amp/portals/*
+

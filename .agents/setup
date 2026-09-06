@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+echo "==> [$(date +'%Y-%m-%d %H:%M:%S')] Starting .agents/setup for koppengame..."
+
+# Verify python3 is available
+if ! command -v python3 >/dev/null 2>&1; then
+  echo "Installing python3..."
+  sudo apt-get update
+  sudo apt-get install -y python3
+fi
+
+# Pre-compile Python files to bytecode for faster startup and syntax validation
+python3 -m compileall -q .
+
+echo "==> [$(date +'%Y-%m-%d %H:%M:%S')] Setup complete."

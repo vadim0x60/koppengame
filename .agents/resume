@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Fast, idempotent reconnect / check steps (under 10s)
+# No background processes or slow package installations here.
+exit 0
