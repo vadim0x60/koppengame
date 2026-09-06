@@ -12,7 +12,7 @@ A GeoGuessr-inspired geography and climatology game that drops you into a myster
 - **In-Game Reference Guide**: A built-in modal with quick summaries of the entire Köppen classification scheme.
 - **Stats & Streaks**: Tracks rounds, current streak, high streak, and overall accuracy.
 - **Zero Configuration Required**: Works out-of-the-box in any modern browser. Supports an optional custom Google Maps API key if you want to use the official Maps Embed API.
-- **Massive Global Location Pool**: Over 2,600 verified global Street View panoramas sampled from the open-source GeoGuessr world pool and cross-referenced with high-resolution Köppen climatology rasters, balanced across all major climate groups and subtypes.
+- **Rural-biased Location Pool**: The [built-up-land pilot](../sampling/README.md) selects 1,099 of 2,628 source sites, reducing the geographic urban proxy from 56% to 24% while retaining every represented climate × country combination. The full source pool is preserved; panorama coordinates and environmental visibility still need scene review.
 
 ## 🚀 How to Run
 

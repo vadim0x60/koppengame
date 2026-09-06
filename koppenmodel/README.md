@@ -8,9 +8,10 @@ and potential human-study instrument, not the definition of model success.
 
 Primary data: licensed geotagged photo collections, labeled against climate maps.
 Neither Street View access nor beating human game scores is a prerequisite.
-No dataset collection, model download, or training has been run. The only
-implemented component is the original offline game-metadata audit/view planner;
-it does not yet implement the broader photo pipeline described here.
+No photo collection, model download, or training has been run. Implemented tools
+include the offline game-metadata audit/view planner and a shared
+[built-up-land sampling pilot](../sampling/README.md) using a public GHSL raster.
+They do not yet implement the broader photo pipeline described here.
 
 ## Research questions
 
@@ -132,6 +133,14 @@ and audited climate labels separate when they disagree; report both rather than
 “correcting” the model into reproducing game errors.
 
 ### Coverage and sampling
+
+The implemented [geographic-only pilot](../sampling/README.md) annotates the game
+seed at 100 m/500 m scales and exports training-only land-use weights. Pass
+`--land-use ../sampling/pilot/manifest.json` to `prepare.py` to attach these to
+the unsplit view plan; all sites remain, including those excluded from the game.
+Scene visibility/cultural-cue review is queued, not completed. Recompute weight
+normalization on training sites after geographic splitting; never filter or
+reweight the locked evaluation set with the game's selection policy.
 
 1. Pilot: ~5,000 distinct sites across available classes and multiple separated
    regions per class. Inspect coverage before fixing quotas; EF and extreme

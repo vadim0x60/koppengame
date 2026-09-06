@@ -110,7 +110,24 @@ const closeModalBtn = document.getElementById('close-modal-btn');
 async function init() {
   try {
     const res = await fetch('locations.json?t=' + Date.now());
-    locations = await res.json();
+    const source = await res.text();
+    locations = JSON.parse(source);
+    // Keep the full source pool intact; the reproducible land-use pilot selects
+    // a rural-biased deck. If data changes, never apply a stale selection.
+    try {
+      const selectionRes = await fetch('game-selection.json?t=' + Date.now());
+      if (!selectionRes.ok) throw new Error('Land-use selection unavailable');
+      const selection = await selectionRes.json();
+      const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(source));
+      const hash = [...new Uint8Array(digest)].map(b => b.toString(16).padStart(2, '0')).join('');
+      if (hash !== selection.source_sha256) throw new Error('Stale land-use selection');
+      const ids = new Set(selection.selected_ids);
+      const selected = locations.filter(location => ids.has(location.id));
+      if (!selected.length || selected.length !== ids.size) throw new Error('Invalid land-use selection');
+      locations = selected;
+    } catch (err) {
+      console.warn('Using full location pool:', err);
+    }
     locations.forEach(location => {
       if (location.koppen_code === 'Aw' || location.koppen_code === 'As') {
         location.koppen_code = 'Aw/As';

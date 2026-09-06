@@ -1,6 +1,10 @@
 import unittest
+import hashlib
+import json
+from pathlib import Path
+import tempfile
 
-from prepare import audit, game_code, planned_views, selectable_codes
+from prepare import audit, game_code, load_land_use, planned_views, selectable_codes
 
 
 def site(code="Af", **changes):
@@ -46,6 +50,28 @@ class PrepareTests(unittest.TestCase):
         self.assertEqual(len({v["view_id"] for v in views}), 4)
         self.assertTrue(all(v["split"] is None and v["rights_ref"] is None for v in views))
         self.assertEqual(views, list(planned_views(rows)))
+
+    def test_land_use_keeps_all_sites_and_evaluation_unweighted(self):
+        rows = [site()]
+        source = json.dumps(rows).encode()
+        manifest = {"schema_version": 1, "source_sha256": hashlib.sha256(source).hexdigest(),
+                    "sites": [{"id": "a", "land_use": "urban", "train_sampling_weight": 0.25,
+                               "game_selected": False, "evaluation_weight": 0.25}]}
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "manifest.json"
+            path.write_text(json.dumps(manifest))
+            views = list(planned_views(rows, load_land_use(path, source)))
+            self.assertEqual(len(views), 4)
+            self.assertTrue(all(v["train_sampling_weight"] == 0.25 and
+                                v["evaluation_weight"] == 1 and v["land_use"] == "urban"
+                                for v in views))
+            with self.assertRaises(ValueError):
+                load_land_use(path, source + b" ")
+            for sites in ([], manifest["sites"] * 2,
+                          [{"id": "a", "land_use": "urban", "train_sampling_weight": -1}]):
+                path.write_text(json.dumps({**manifest, "sites": sites}))
+                with self.assertRaises(ValueError):
+                    load_land_use(path, source)
 
 
 if __name__ == "__main__":

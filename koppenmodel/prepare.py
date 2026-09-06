@@ -96,8 +96,28 @@ def audit(rows, codes):
     }
 
 
-def planned_views(rows):
+def load_land_use(path, source_bytes):
+    manifest = json.loads(path.read_text())
+    if (manifest.get("schema_version") != 1
+            or manifest.get("source_sha256") != hashlib.sha256(source_bytes).hexdigest()):
+        raise ValueError("Unsupported or stale land-use manifest; regenerate annotations")
+    sites = manifest["sites"]
+    index = {site["id"]: site for site in sites}
+    expected = {row["id"] for row in json.loads(source_bytes)}
+    if len(index) != len(sites) or set(index) != expected:
+        raise ValueError("Land-use manifest must cover every source site exactly once")
+    for site in sites:
+        weight = site["train_sampling_weight"]
+        if (isinstance(weight, bool) or not isinstance(weight, (int, float))
+                or not math.isfinite(weight) or weight <= 0
+                or site["land_use"] not in ("rural", "mixed", "urban", "unknown")):
+            raise ValueError("Invalid land-use annotation or training weight")
+    return index
+
+
+def planned_views(rows, land_use=None):
     for index, row in enumerate(rows):
+        annotation = land_use[row["id"]] if land_use is not None else None
         for heading in (0, 90, 180, 270):
             yield {
                 "view_id": f"seed_{index:06d}_{heading:03d}",
@@ -109,6 +129,9 @@ def planned_views(rows):
                 "heading": heading, "pitch": 0, "fov": 90,
                 "split": None, "rights_ref": None,
                 "status": "blocked_pending_rights_and_label_review",
+                "land_use": annotation["land_use"] if annotation else "unknown",
+                "train_sampling_weight": annotation["train_sampling_weight"] if annotation else 1.0,
+                "evaluation_weight": 1.0,
             }
 
 
@@ -117,6 +140,7 @@ def main():
     parser.add_argument("--game", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--views-output", type=Path)
+    parser.add_argument("--land-use", type=Path, help="Shared sampling manifest; weights are training-only")
     args = parser.parse_args()
     sources = [args.game / "locations.json", args.game / "app.js"]
     outputs = [p for p in (args.output, args.views_output) if p is not None]
@@ -132,19 +156,23 @@ def main():
         rows = json.loads(locations_bytes)
         codes = selectable_codes(app_bytes.decode("utf-8"))
         report = audit(rows, codes)
+        land_use = load_land_use(args.land_use, locations_bytes) if args.land_use else None
     except (OSError, ValueError) as exc:
         parser.error(str(exc))
     report["source_sha256"] = {
         "locations.json": hashlib.sha256(locations_bytes).hexdigest(),
         "app.js": hashlib.sha256(app_bytes).hexdigest(),
     }
+    if land_use is not None:
+        report["land_use_counts"] = dict(Counter(s["land_use"] for s in land_use.values()))
+        report["source_sha256"]["land_use_manifest"] = hashlib.sha256(args.land_use.read_bytes()).hexdigest()
     for output in outputs:
         output.parent.mkdir(parents=True, exist_ok=True)
     with args.output.open("x") as stream:
         stream.write(json.dumps(report, indent=2) + "\n")
     if args.views_output:
         with args.views_output.open("x") as stream:
-            for view in planned_views(rows):
+            for view in planned_views(rows, land_use):
                 stream.write(json.dumps(view) + "\n")
     print(f"Audited {len(rows)} sites; {len(codes)} selectable classes; "
           f"{len(report['absent_game_classes'])} absent. No imagery downloaded.")
